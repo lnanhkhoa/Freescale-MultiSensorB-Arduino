@@ -1,6 +1,10 @@
 //#include "FXLS8471Q.h"
 #include "Wire.h"
+<<<<<<< HEAD
 //#include <Math.h>
+=======
+#include <Math.h>
+>>>>>>> a185910ac7361e14bbfe5a84ce7cd2ea63a1c005
 // #include <Adafruit_GFX.h>
 // #include <Adafruit_PCD8544.h>
 
@@ -89,6 +93,7 @@ void loop()
 //		float accel_angle_z = 0;
 		
 		
+<<<<<<< HEAD
 		// Serial.print(F("DEL:"));
 		// Serial.print(27, DEC);
 		// Serial.print(F("#FIL:"));
@@ -98,6 +103,17 @@ void loop()
 		// Serial.print(F(","));
 		// Serial.print(accel_angle_z,2);
 		// Serial.println(F(""));
+=======
+		Serial.print(F("DEL:"));
+		Serial.print(27, DEC);
+		Serial.print(F("#FIL:"));
+		Serial.print(accel_angle_x,2);
+		Serial.print(F(","));
+		Serial.print(accel_angle_y,2);
+		Serial.print(F(","));
+		Serial.print(accel_angle_z,2);
+		Serial.println(F(""));
+>>>>>>> a185910ac7361e14bbfe5a84ce7cd2ea63a1c005
 		delay(5);
 	}
 	else

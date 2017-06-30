@@ -76,6 +76,17 @@ void loop()
     fdata[1] = ((float) iy) / 16384.0;
     fdata[2] = ((float) iz) / 16384.0;
   
+<<<<<<< HEAD
+=======
+  
+  
+  
+  
+  
+  
+  
+  
+>>>>>>> a185910ac7361e14bbfe5a84ce7cd2ea63a1c005
   // One can use the interrupt pins to detect a data ready condition; here we just check the STATUS register for a data ready bit
   if(readByte(FXLS8471Q_ADDRESS, DR_STATUS) & 0x08)  { // When this bit set, all axes have new data
  
@@ -104,6 +115,63 @@ void loop()
 
 
 
+<<<<<<< HEAD
+=======
+// Set up sensor software reset
+void MAG3110Reset() 
+{
+writeByte(FXLS8471Q_ADDRESS, CTRL_REG2, 0x10); // set reset bit to 1 to assert software reset to zero at end of boot process
+}
+
+// Allow user compensation of acceleration errors
+void MAG3110Offsets()
+{
+   MAG3110Standby();  // Must be in standby to change registers
+   
+   writeByte(FXLS8471Q_ADDRESS, OFF_X_MSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(FXLS8471Q_ADDRESS, OFF_X_LSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(FXLS8471Q_ADDRESS, OFF_Y_MSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(FXLS8471Q_ADDRESS, OFF_Y_LSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(FXLS8471Q_ADDRESS, OFF_Z_MSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(FXLS8471Q_ADDRESS, OFF_Z_LSB, 0x00); // X-axis compensation; this is 0 mg
+   
+   MAG3110Active();  // Set to active to start reading
+}
+
+// Initialize the MAG3110 registers 
+// See the many application notes for more info on setting all of these registers:
+// http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MAG3110
+// Feel free to modify any values, these are settings that work well for me.
+void initMAG3110()
+{
+  MAG3110Standby();  // Must be in standby to change registers
+
+  // Set up the magnetometer sample rate and oversample ratio
+    writeByte(FXLS8471Q_ADDRESS, CTRL_REG1, magODR << 3);  
+  // Enable automatic magnetic sensor resets
+    writeByte(FXLS8471Q_ADDRESS, CTRL_REG2, 0x80);  // set normal mode, correct with user offset registers
+
+  MAG3110Active();  // Set to active to start reading
+}
+
+// Sets the MAG3110 to standby mode.
+// It must be in standby to change most register settings
+void MAG3110Standby()
+{
+  byte c = readByte(FXLS8471Q_ADDRESS, CTRL_REG1);
+  writeByte(FXLS8471Q_ADDRESS, CTRL_REG1, c & ~(0x01));
+}
+
+// Sets the MAG3110 to active mode.
+// Needs to be in this mode to output data
+void MAG3110Active()
+{
+  byte c = readByte(FXLS8471Q_ADDRESS, CTRL_REG1);
+  writeByte(FXLS8471Q_ADDRESS, CTRL_REG1, c | 0x01);  
+}
+
+
+>>>>>>> a185910ac7361e14bbfe5a84ce7cd2ea63a1c005
 
 
 
