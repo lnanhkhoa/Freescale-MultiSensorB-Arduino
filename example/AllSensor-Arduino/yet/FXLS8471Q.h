@@ -16,73 +16,71 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef MMA8652_H
-#define MMA8652_H
+
+#ifndef FXLS8471Q_H
+#define FXLS8471Q_H
 
 #include "mbed.h"
 
+// FXLS8471Q internal register addresses
 
-// MMA8652 Slave Address
-#define MMA8652_SLAVE_ADDR 0x1D
-
-// MMA8652 internal register addresses
-#define MMA8652_STATUS 0x00
-#define MMA8652_OUT_X_MSB 0x01
-#define MMA8652_WHOAMI 0x0D
-#define MMA8652_XYZ_DATA_CFG 0x0E
-#define MMA8652_CTRL_REG1 0x2A
-#define MMA8652_WHOAMI_VAL 0x4A
+#define FXLS8471Q_STATUS 0x00
+#define FXLS8471Q_OUT_X_MSB 0x01
+#define FXLS8471Q_WHOAMI 0x0D
+#define FXLS8471Q_XYZ_DATA_CFG 0x0E
+#define FXLS8471Q_CTRL_REG1 0x2A
+#define FXLS8471Q_WHOAMI_VAL 0x6A
 
 /**
- * MMA8652 Xtrinsic accelerometer on I2C
+ * FXLS8471Q Xtrinsic accelerometer on SPI
  */
-class MMA8652
+class FXLS8471Q
 {
 public:
     /**
-     * MMA8652 constructor
-     *
-     * @param sda SDA pin
-     * @param sdl SCL pin
-     */
-    MMA8652(PinName sda, PinName scl);
+    * FXLS8471Q constructor
+    *
+    * @param mosi MOSI pin
+    * @param miso MISO pin
+    * @param scl  SCL  pin
+    * @param cs   Device Chip Select pin
+    */
+    FXLS8471Q(PinName mosi, PinName miso, PinName scl, PinName cs);
 
     /**
-     * MMA8652 destructor
-     */
-    ~MMA8652();
-    
-    /**
-     * Get XYZ axis acceleration in floating point G's
+     * Get XYZ axis acceleration in G's as floating point
      *
      * @param res array where acceleration data will be stored
      */
     void ReadXYZ(float * a);
 
     /**
-     * Get XYZ axis acceleration, signed 16 bit values
+     * Get XYZ axis acceleration as signed 16 bit values
      *
      * @param res array where acceleration data will be stored
      */
     void ReadXYZraw(int16_t * d);
-    
+
     /**
      * Get the value of the WHO_AM_I register
      *
-     * @returns DEVICE_ID value == 0x1D
+     * @returns WHO_AM_I value
      */
     char getWhoAmI(void);
 
 private:
-    I2C _i2c;
+    SPI _spi;
+
+    DigitalOut _spi_cs;
 
     /**
      * Set the device in active mode
      */
     void begin( void);
 
-    void RegRead( char reg, char * d, int len);
+    void RegWrite( int reg, int * d, int len);
 
+    void RegRead( int reg, int * d, int len);
 };
 
 #endif

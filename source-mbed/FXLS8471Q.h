@@ -31,6 +31,9 @@
 #define FXLS8471Q_CTRL_REG1 0x2A
 #define FXLS8471Q_WHOAMI_VAL 0x6A
 
+// MMA8652 Slave Address (For I2C)
+//#define FXLS8471Q_ADDRESS 0x1E
+
 /**
  * FXLS8471Q Xtrinsic accelerometer on SPI
  */

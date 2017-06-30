@@ -16,63 +16,60 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef MMA8652_H
-#define MMA8652_H
+#ifndef FXAS21000_H
+#define FXAS21000_H
 
 #include "mbed.h"
 
 
-// MMA8652 Slave Address
-#define MMA8652_SLAVE_ADDR 0x1D
+/**
+ * MMA8652 Slave Address
+ */
+#define FXAS21000_SLAVE_ADDR 0x40
 
 // MMA8652 internal register addresses
-#define MMA8652_STATUS 0x00
-#define MMA8652_OUT_X_MSB 0x01
-#define MMA8652_WHOAMI 0x0D
-#define MMA8652_XYZ_DATA_CFG 0x0E
-#define MMA8652_CTRL_REG1 0x2A
-#define MMA8652_WHOAMI_VAL 0x4A
+#define FXAS21000_STATUS 0x00
+#define FXAS21000_WHOAMI 0x0C
+#define FXAS21000_XYZ_DATA_CFG 0x0E
+#define FXAS21000_CTRL_REG0 0x0D
+#define FXAS21000_CTRL_REG1 0x13
+#define FXAS21000_WHOAMI_VAL 0xD1
 
 /**
- * MMA8652 Xtrinsic accelerometer on I2C
+ * FXAS21000 gyroscope on I2C
  */
-class MMA8652
+class FXAS21000
 {
 public:
     /**
-     * MMA8652 constructor
+     * FXAS21000 constructor
      *
      * @param sda SDA pin
      * @param sdl SCL pin
      */
-    MMA8652(PinName sda, PinName scl);
-
+    FXAS21000(PinName sda, PinName scl);
+ 
     /**
-     * MMA8652 destructor
-     */
-    ~MMA8652();
-    
-    /**
-     * Get XYZ axis acceleration in floating point G's
+     * Get the Gyro values as floating point degrees / second
      *
-     * @param res array where acceleration data will be stored
+     * @param floating point array where the results will be placed
      */
     void ReadXYZ(float * a);
 
     /**
-     * Get XYZ axis acceleration, signed 16 bit values
+     * Get the Gyro values as signed 16 bit value
      *
-     * @param res array where acceleration data will be stored
+     * @param int16_t point array where the results will be placed
      */
-    void ReadXYZraw(int16_t * d);
-    
+    void ReadXYZraw(int16_t * t);
+   
     /**
      * Get the value of the WHO_AM_I register
      *
-     * @returns DEVICE_ID value == 0x1D
+     * @returns DEVICE_ID value == 0xD1
      */
     char getWhoAmI(void);
-
+    
 private:
     I2C _i2c;
 
@@ -80,9 +77,8 @@ private:
      * Set the device in active mode
      */
     void begin( void);
-
+    
     void RegRead( char reg, char * d, int len);
-
 };
 
 #endif

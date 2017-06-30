@@ -25,7 +25,8 @@
 /**
  * MMA8652 Slave Address
  */
-#define FXAS21000_SLAVE_ADDR 0x40
+
+#define FXAS21000_SLAVE_ADDR 0x40       //(0x20)
 
 // MMA8652 internal register addresses
 #define FXAS21000_STATUS 0x00

@@ -23,7 +23,7 @@
 
 
 // MMA8652 Slave Address
-#define MMA8652_SLAVE_ADDR 0x1D
+#define MMA8652_SLAVE_ADDR 0x3A
 
 // MMA8652 internal register addresses
 #define MMA8652_STATUS 0x00
@@ -69,7 +69,7 @@ public:
     /**
      * Get the value of the WHO_AM_I register
      *
-     * @returns DEVICE_ID value == 0x1D
+     * @returns DEVICE_ID value == 0x3A
      */
     char getWhoAmI(void);
 

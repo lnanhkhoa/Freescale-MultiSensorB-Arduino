@@ -47,7 +47,6 @@ void MMA8652::begin(void)
     data[0] = MMA8652_CTRL_REG1;
     data[1] = 0x00;
     _i2c.write( MMA8652_SLAVE_ADDR, data, 2);
-    
     // write 0000 0001= 0x01 to XYZ_DATA_CFG register
     // [7]: reserved
     // [6]: reserved
@@ -97,8 +96,8 @@ void MMA8652::ReadXYZ(float * a)
 
 void MMA8652::ReadXYZraw(int16_t * d)
 {
-    char res[6];
-    int16_t acc;
+char res[6];
+int16_t acc;
     RegRead( MMA8652_OUT_X_MSB, res, 6);
 
     acc = (res[0] << 6) | (res[1] >> 2);
