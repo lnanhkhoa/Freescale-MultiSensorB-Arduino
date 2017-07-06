@@ -16,26 +16,29 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef  SPI_H  
+// #ifndef WIRE_H
+// #define WIRE_H
+// #include "Wire.h"
+// #endif
+
+
+#ifndef  SPI_H 
+#define  SPI_H 
 #include <SPI.h>
 #endif
 
 #include "FXLS8471Q.h"
-#define UINT14_MAX        16383
 
-typedef byte PinName;
+/* import protocol for connect */
+#include "spiConnect.h"
+
+spi_arduino _spi;
 
 
 FXLS8471Q::FXLS8471Q(PinName mosi, PinName miso, PinName scl, PinName cs)
 {
     delay(0.1);
-    
-    this.mosi = mosi;
-    this.miso = miso;
-    this.scl = scl;
-    this.cs = cs;
-
-    begin();
+    _spi.setPin(mosi, miso, scl, cs);
 }
 
 void FXLS8471Q::RegWrite( int reg, int *d, int len)
@@ -44,11 +47,12 @@ void FXLS8471Q::RegWrite( int reg, int *d, int len)
     int c = 0;
     ob[1] = 0;
     ob[0] = reg + 128;
-    _spi_cs(false);
-    _spi_write(ob[0]);
-    _spi_write(ob[1]);
-    while(c < len) _spi_write(d[c++]);
-    _spi_cs(true);
+    _spi.cs(false);
+    _spi.write(ob[0]);
+    _spi.write(ob[1]);
+    while(c < len) 
+        _spi.write(d[c++]);
+    _spi.cs(true);
 }
 
 
@@ -58,16 +62,17 @@ void FXLS8471Q::RegRead( int reg, int *d, int len)
     int c = 0;
     ob[0] = reg;
     ob[1] = 0;
-    _spi_cs(false);
-    _spi_write(ob[0]);
-    _spi_write(ob[1]);
-    while(c < len) d[c++] = _spi_write(0xff);
-    _spi_cs(true);
+    _spi.cs(false);
+    _spi.write(ob[0]);
+    _spi.write(ob[1]);
+    while(c < len) 
+        d[c++] = _spi.read(0xff);
+    _spi.cs(true);
 }
 
 char FXLS8471Q::getWhoAmI(void)
 {
-    int d;
+    static int d;
     RegRead( FXLS8471Q_WHOAMI, &d, 1);
     return((char) d);
 }
@@ -76,7 +81,7 @@ char FXLS8471Q::getWhoAmI(void)
 void FXLS8471Q::begin(void)
 {
     int databyte;
-
+    _spi.begin();
     // write 0000 0000 = 0x00 to accelerometer control register 1 to place FXLS8471Q into
     // standby
     // [7-1] = 0000 000
@@ -139,22 +144,20 @@ void FXLS8471Q::ReadXYZraw(int16_t * d)
     d[2] = acc;
 }
 
-
-
 /*                          
 *   Function for Arduino    *
 */
 
-void FXLS8471Q::_spi_write(int16_t * d)
-{
-    SPI.transfer(d);
-}
+// void FXLS8471Q::_spi_write(int16_t * d)
+// {
+//     SPI.transfer(d);
+// }
 
-void FXLS8471Q::_spi_cs(bool digitalOut)
-{
-    static PinName slaveSelectPin;
-    if (digitalOut)
-        digitalWrite(slaveSelectPin, HIGH);
-    else
-        digitalWrite(slaveSelectPin, LOW);
-}
+// void FXLS8471Q::_spi_cs(bool digitalOut)
+// {
+//     static PinName slaveSelectPin;
+//     if (digitalOut)
+//         digitalWrite(slaveSelectPin, HIGH);
+//     else
+//         digitalWrite(slaveSelectPin, LOW);
+// }

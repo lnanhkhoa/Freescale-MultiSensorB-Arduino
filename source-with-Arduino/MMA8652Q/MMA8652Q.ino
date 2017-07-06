@@ -144,14 +144,15 @@ boolean sleepMode = false;
 void setup()
 {
     Serial.begin(38400);
-
+    Serial.println("Start");
+    Wire.begin();
     //  lcd.begin(16, 2);// Initialize the LCD with 16 characters and 2 lines
  
-    // Set up the interrupt pins, they're set as active high, push-pull
-    pinMode(int1Pin, INPUT);
-    digitalWrite(int1Pin, LOW);
-    pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, LOW);
+    // // Set up the interrupt pins, they're set as active high, push-pull
+    // pinMode(int1Pin, INPUT);
+    // digitalWrite(int1Pin, LOW);
+    // pinMode(ledPin, OUTPUT);
+    // digitalWrite(ledPin, LOW);
     
     //display.begin(); // Initialize the //display
     //display.setContrast(58); // Set the contrast
@@ -184,7 +185,7 @@ void setup()
     //display.setCursor(0, 40); //display.print("Ox");//display.print(0x4A, HEX);  
     //display.//display();
     //delay(1000);
-    Serial.println(c);
+    Serial.println(c,HEX);
     if (c == 0x4A) // WHO_AM_I should always be 0x4A
     {  
         MMA8652Reset(); // Start by resetting sensor device to default settings
@@ -208,38 +209,44 @@ void setup()
     }
 }
 
+void loop1()
+{
+    
+}
+
+
+
 void loop()
 {  
     // One can use the interrupt pins to detect a data ready condition; here we just check the STATUS register for a data ready bit
+
+    Serial.println(readByte(MMA8652_ADDRESS, STATUS));
+    while(1){
+        // statement
+    }
     if(readByte(MMA8652_ADDRESS, STATUS) & 0x08)  // When this bit set, all axes have new data
     {
-        readAccelData(accelCount);  // Read the x/y/z adc values
-        getAres();                  // get accelerometer sensitivity
-        ax = (float)accelCount[0]*aRes;  // get actual g value, this depends on scale being set
-        ay = (float)accelCount[1]*aRes;  // also subtract averaged accelerometer biases
-        az = (float)accelCount[2]*aRes;  
         
-        // Print out values
-            Serial.print("x-acceleration = "); Serial.print(1000.*ax); Serial.print(" mg");   
-            Serial.print("y-acceleration = "); Serial.print(1000.*ay); Serial.print(" mg");   
-            Serial.print("z-acceleration = "); Serial.print(1000.*az); Serial.print(" mg");  
+            // statement
+            readAccelData(accelCount);  // Read the x/y/z adc values
+            getAres();                  // get accelerometer sensitivity
+            ax = (float)accelCount[0]*aRes;  // get actual g value, this depends on scale being set
+            ay = (float)accelCount[1]*aRes;  // also subtract averaged accelerometer biases
+            az = (float)accelCount[2]*aRes;  
+            
+
+            Serial.print(1000.*ax); Serial.print(",");
+            Serial.print(1000.*ay); Serial.print(",");
+            Serial.println(1000.*az);
+
+            // Print out values
+                // Serial.print("x-acceleration = "); Serial.print(1000.*ax); Serial.println(" mg");   
+                // Serial.print("y-acceleration = "); Serial.print(1000.*ay); Serial.println(" mg");   
+                // Serial.print("z-acceleration = "); Serial.print(1000.*az); Serial.println(" mg");  
+        }
 
      uint32_t deltat = millis() - count;
      if (deltat > 500) { // update LCD once per half-second independent of read rate
-
-        //display.clear//display();
-         
-        //display.setCursor(0,0); //display.print("MMA8652");
-        //display.drawPixel(7, 8, BLACK); //display.drawPixel(9, 8, BLACK); 
-        //display.setCursor(0,8); //display.print(" x ");  //display.print((int)(1000*ax)); 
-        //display.setCursor(43,8); //display.print(" mg");
-        //display.drawPixel(7, 16, BLACK); //display.drawPixel(9, 16, BLACK); 
-        //display.setCursor(0,16); //display.print(" y "); //display.print((int)(1000*ay)); 
-        //display.setCursor(43,16); //display.print(" mg");
-        //display.drawPixel(7, 24, BLACK); //display.drawPixel(9, 24, BLACK); 
-        //display.setCursor(0,24); //display.print(" z "); //display.print((int)(1000*az)); 
-        //display.setCursor(43,24); //display.print(" mg");
-        //display.//display();
         count = millis();
         digitalWrite(ledPin, !digitalRead(ledPin));
         }
@@ -280,7 +287,7 @@ void getAres() {
     {
     // Possible accelerometer scales (and their register bit settings) are:
     // 2 Gs (00), 4 Gs (01), 8 Gs (10), and 16 Gs  (11). 
-                // Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
+    // Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
         case AFS_2g:
                     aRes = 2.0/2048.0;
                     break;
@@ -339,7 +346,7 @@ void tapHandler()
             Serial.println(" +");
             //display.setCursor(0,32); //display.print("tap on +y"); 
         }
-}
+    }
     if (source & 0x40)  // If AxZ bit is set
     {
         if (source & 0x08)  // If DPE (double puls) bit is set
@@ -404,45 +411,45 @@ void portraitLandscapeHandler()
 // print motion direction
 void motionDetect()
 {
-        byte source = readByte(MMA8652_ADDRESS, FF_MT_SRC);
+    byte source = readByte(MMA8652_ADDRESS, FF_MT_SRC);
     if((source >> 7) == 1) {  // If Event Active flag set in the FF_MT_SRC register
 
-     if (source & 0x02)  // If XHE bit is set, x-motion detected
-    {
-        if (source & 0x01)  { // If XHP is 1, x event was negative g
-            Serial.println(" -");
-            //display.setCursor(0,32); //display.print("motion to -x"); 
+        if (source & 0x02)  // If XHE bit is set, x-motion detected
+        {
+            if (source & 0x01)  { // If XHP is 1, x event was negative g
+                Serial.println(" -");
+                //display.setCursor(0,32); //display.print("motion to -x"); 
+            }
+            else {
+                Serial.println(" +");
+                //display.setCursor(0,32); //display.print("motion to +x"); 
+            }
         }
-        else {
-            Serial.println(" +");
-            //display.setCursor(0,32); //display.print("motion to +x"); 
+        if ((source & 0x08)==0x08)  // If YHE bit is set, y-motion detected
+        {
+            if (source & 0x04) { // If YHP is set, y event was negative g
+                Serial.println(" -");
+                //display.setCursor(0,32); //display.print("motion to -y"); 
+            }
+            else {
+                Serial.println(" +");
+                //display.setCursor(0,32); //display.print("motion to +y"); 
+            }
         }
+        if (source & 0x20)  // If ZHE bit is set, z-motion detected
+        {
+            if (source & 0x10) { // If ZHP is set
+                Serial.println(" -"); 
+                //display.setCursor(0,32); //display.print("motion to -z"); 
+            }
+            else {
+                Serial.println(" +");
+                //display.setCursor(0,32); //display.print("motion to +z"); 
+            }
+        }
+        //display.//display();  // //display motion message
+        delay(1000); // Wait a while so we can the message
     }
-    if ((source & 0x08)==0x08)  // If YHE bit is set, y-motion detected
-    {
-        if (source & 0x04) { // If YHP is set, y event was negative g
-            Serial.println(" -");
-            //display.setCursor(0,32); //display.print("motion to -y"); 
-        }
-        else {
-            Serial.println(" +");
-            //display.setCursor(0,32); //display.print("motion to +y"); 
-        }
-    }
-    if (source & 0x20)  // If ZHE bit is set, z-motion detected
-    {
-        if (source & 0x10) { // If ZHP is set
-            Serial.println(" -"); 
-            //display.setCursor(0,32); //display.print("motion to -z"); 
-        }
-        else {
-            Serial.println(" +");
-            //display.setCursor(0,32); //display.print("motion to +z"); 
-        }
-    }
-    //display.//display();  // //display motion message
-    delay(1000); // Wait a while so we can the message
-}
 } 
 
 void calibrateMMA8652()

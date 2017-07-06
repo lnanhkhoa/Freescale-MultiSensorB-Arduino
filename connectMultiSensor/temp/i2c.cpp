@@ -3,20 +3,19 @@
 /******************************************************************** 
 *                File arduino_i2c.h
 ********************************************************************/
+
+#ifndef WIRE_H
+#define WIRE_H
 #include "Wire.h"
+#endif
+
 #include "i2c.h"
 
 //
 // Created by User on 6/29/2017.
 //
 
-I2C::I2C(PinName sda, PinName scl, const char *name) {
-
-}
-
-
-void I2C::frequency(int hz) {
-
+I2C::I2C(PinName sda, PinName scl) {
 
 }
 
@@ -37,7 +36,11 @@ int I2C::write(int address, const char *cmd, int length, bool repeated) {
     for (i = 0; i < length; ++i){
         Wire.write(cmd[i]);        
     }
-    Wire.endTransmission(!repeated);
+    if (repeated)
+    {
+        Wire.endTransmission(!repeated);
+    }
+    Wire.endTransmission();
 }
 
 
@@ -51,13 +54,6 @@ void I2C::start() {
 void I2C::stop() {
     Wire.endTransmission();
 }
-
-
-void I2C::aquire() {
-    
-}
-
-
 
 // void I2c_ReadRegister(unsigned char SlaveID, unsigned char RegisterAddress,unsigned char *Data,unsigned int len){
 //  Wire.beginTransmission(SlaveID);   // Initialize the Tx buffer

@@ -134,12 +134,17 @@
 //     }
 // }
 
-#include "Wire.h"
-#include "i2c.h"
-#include "source/FXLS8471.h"
+// #ifndef WIRE_H
+// #define WIRE_H
+// #include "Wire.h"
+// #endif
+
+//#include "i2c.h"
 
 
 
+
+// #include "source/FXLS8471Q.h"
 /*******
 *
 *   Connect Arduino
@@ -149,91 +154,25 @@
 #include "connectArduino/arduino-FXLS8471Q.h"
 
 
-I2C _i2c(2,3);
-
-void MMA8652_begin(void)
-{
-    char data[2];
-    // write 0000 0000 = 0x00 to accelerometer control register 1 to place MMA8652 into
-    // standby
-    // [7-1] = 0000 000
-    // [0]: active=0
-    data[0] = MMA8652_CTRL_REG1;
-    data[1] = 0x00;
-    _i2c.write( MMA8652_SLAVE_ADDR, data, 2);
-    
-    // write 0000 0001= 0x01 to XYZ_DATA_CFG register
-    // [7]: reserved
-    // [6]: reserved
-    // [5]: reserved
-    // [4]: hpf_out=0
-    // [3]: reserved
-    // [2]: reserved
-    // [1-0]: fs=00 for accelerometer range of +/-2g range with 0.244mg/LSB
-    data[0] = MMA8652_XYZ_DATA_CFG;
-    data[1] = 0x00;
-    _i2c.write( MMA8652_SLAVE_ADDR, data, 2);
-
-    // write 0000 1101 = 0x0D to accelerometer control register 1
-    // [7-6]: aslp_rate=00
-    // [5-3]: dr=100 for 50Hz data rate
-    // [2]: 0
-    // [1]: 0
-    // [0]: active=1 to take the part out of standby and enable sampling
-    data[0] = MMA8652_CTRL_REG1;
-    data[1] = 0x21;
-    _i2c.write( MMA8652_SLAVE_ADDR, data, 2);
-}
-
-byte MMA8652_RegRead( char reg, int len)
-{
-    byte data;
-    char i2c_address = FXAS21000_SLAVE_ADDR;
-    Wire.beginTransmission(i2c_address);         // Initialize the Tx buffer
-    Wire.write(reg);                  // Put slave register address in Tx buffer
-    Wire.endTransmission(false);             // Send the Tx buffer, but send a restart to keep connection alive
-    Wire.requestFrom(i2c_address, 1);  // Read one uint8_t from slave register address 
-    data = Wire.read();                      // Fill Rx buffer with result
-    return data;           
-}
-
-byte  MMA8652_getWhoAmI(void)
-
-{
-    static byte data;
-    data = MMA8652_RegRead(FXAS21000_WHOAMI, 1);
-    return data;
-}
-
-
-
-
-
-
+FXLS8471Q_Connect _FXLS8471Q_Connect;
 
 
 
 void setup(){
+    Serial.begin(38400);
+
     Serial.println("START");
+    // _i2c.start();
 
     byte data;
-    Serial.begin(38400);
-    _i2c.start();
-    
-
-    //FXLS8471();
-    //FXLS8471Q.setup();
-
-    data = MMA8652_getWhoAmI();
-    Serial.println(data,HEX);
+    // _FXLS8471Q_Connect.setup();
 
 }
 
 void loop(){
 
-    //FXLS8471Q.main();
+    // _FXLS8471Q_Connect.main();
     Serial.println("end");
-
     while(1){
         // statement
     }
