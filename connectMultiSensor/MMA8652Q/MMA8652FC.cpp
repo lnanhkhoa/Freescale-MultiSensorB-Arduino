@@ -24,7 +24,7 @@ float aRes;
 
 
   
-I2C _i2c(2,3);
+I2C _i2c(0, 0);
 
 MMA8652::MMA8652(PinName sda, PinName scl)
 {

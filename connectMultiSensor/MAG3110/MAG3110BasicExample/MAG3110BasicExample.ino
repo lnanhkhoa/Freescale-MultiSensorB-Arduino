@@ -2,7 +2,7 @@
  Original sketch by: Kris Winer, May 27, 2014 
  
  Includes reset, magnetometer initialization and calibration, as well as parameterizing the register addresses. 
- Added LCD functions to allow data display to on-breadboard monitor.
+ Added LCD functions to allow data //display to on-breadboard monitor.
  
  license: Beerware - Use this code however you'd like. If you 
  find it useful you can buy me a beer some time.
@@ -10,7 +10,7 @@
  This code should provide example usage for most features of
  the MAG3110 3-axis, I2C 16-bit magnetometer. In the loop function
  the magnetoometer interrupt outputs will be polled, and either
- the x/y/z mag data will be output, or magnetic threshold detection will be displayed.
+ the x/y/z mag data will be output, or magnetic threshold detection will be //displayed.
  
  Hardware setup:
  MAG3110 Breakout --------- Arduino
@@ -31,17 +31,6 @@
  */
  
 #include "Wire.h"  
-#include <Adafruit_GFX.h>
-#include <Adafruit_PCD8544.h>
-
-// Using NOKIA 5110 monochrome 84 x 48 pixel display
-// pin 9 - Serial clock out (SCLK)
-// pin 8 - Serial data out (DIN)
-// pin 7 - Data/Command select (D/C)
-// pin 5 - LCD chip select (CS)
-// pin 6 - LCD reset (RST)
-Adafruit_PCD8544 display = Adafruit_PCD8544(9, 8, 7, 5, 6);
-
 // Define registers per MAG3110, Document Number: MAG3110FC
 // Data Sheet: Technical Data Rev. 2.0, 02/2013 3-Axis, 12-bit/8-bit Digital Accelerometer
 // Freescale Semiconductor Data Sheet
@@ -127,37 +116,37 @@ void setup()
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
   
-  // display.begin(); // Initialize the display
-  // display.setContrast(58); // Set the contrast
-  // display.setRotation(2); //  0 or 2) width = width, 1 or 3) width = height, swapped etc.
+  // //display.begin(); // Initialize the //display
+  // //display.setContrast(58); // Set the contrast
+  // //display.setRotation(2); //  0 or 2) width = width, 1 or 3) width = height, swapped etc.
 
   
-// Start device display with ID of sensor
-  // display.clearDisplay();
-  // display.setTextSize(2);
-  // display.setCursor(0,0); display.print("MAG3110");
-  // display.setTextSize(1);
-  // display.setCursor(0, 20); display.print("3-axis 16-bit");
-  // display.setCursor(0, 30); display.print("magnetometer");
-  // display.setCursor(0, 40); display.print("1 mGauss LSB");
-  // display.display();
+// Start device //display with ID of sensor
+  // //display.clear//display();
+  // //display.setTextSize(2);
+  // //display.setCursor(0,0); //display.print("MAG3110");
+  // //display.setTextSize(1);
+  // //display.setCursor(0, 20); //display.print("3-axis 16-bit");
+  // //display.setCursor(0, 30); //display.print("magnetometer");
+  // //display.setCursor(0, 40); //display.print("1 mGauss LSB");
+  // //display.//display();
   // delay(1000);
 
-// Set up for data display
-  display.setTextSize(1); // Set text size to normal, 2 is twice normal etc.
-  display.setTextColor(BLACK); // Set pixel color; 1 on the monochrome screen
-  display.clearDisplay();   // clears the screen and buffer
+// Set up for data //display
+  //display.setTextSize(1); // Set text size to normal, 2 is twice normal etc.
+  //display.setTextColor(BLACK); // Set pixel color; 1 on the monochrome screen
+  //display.clear//display();   // clears the screen and buffer
   
   // Read the WHO_AM_I register, this is a good test of communication
   byte c = readByte(MAG3110_ADDRESS, WHO_AM_I);  // Read WHO_AM_I register
   Serial.print(c,HEX);
-  display.clearDisplay();
-  display.setCursor(0,0); display.print("MAG3110");  
-  display.setCursor(0,10); display.print("I Am");
-  display.setCursor(0, 20); display.print("Ox");display.print(c, HEX);  
-  display.setCursor(0, 30); display.print("I Should be"); 
-  display.setCursor(0, 40); display.print("Ox");display.print(0xC4, HEX);  
-  display.display();
+  //display.clear//display();
+  //display.setCursor(0,0); //display.print("MAG3110");  
+  //display.setCursor(0,10); //display.print("I Am");
+  //display.setCursor(0, 20); //display.print("Ox");//display.print(c, HEX);  
+  //display.setCursor(0, 30); //display.print("I Should be"); 
+  //display.setCursor(0, 40); //display.print("Ox");//display.print(0xC4, HEX);  
+  //display.//display();
   delay(1000);
 
   if (c == 0xC4) // WHO_AM_I should always be 0x4A
@@ -197,17 +186,17 @@ void loop()
     Serial.print("y-magnetic field = "); Serial.print(1000.*my); Serial.print(" mG");   
     Serial.print("z-magnetic field = "); Serial.print(1000.*mz); Serial.println(" mG");  
 
-    display.clearDisplay();    
-    display.setCursor(0, 0); display.print("MAG3110");
-    display.setCursor(0, 8); display.print(" x ");  display.print((int)(1000*mx)); 
-    display.setCursor(43, 8); display.print(" mG");
-    display.setCursor(0, 16); display.print(" y "); display.print((int)(1000*my)); 
-    display.setCursor(43, 16); display.print(" mG");
-    display.setCursor(0, 24); display.print(" z "); display.print((int)(1000*mz)); 
-    display.setCursor(43, 24); display.print(" mG");
-    display.setCursor(0, 32); display.print(" T "); display.print(temperature, 1); 
-    display.setCursor(43, 32); display.print(" C");
-    display.display();
+    //display.clear//display();    
+    //display.setCursor(0, 0); //display.print("MAG3110");
+    //display.setCursor(0, 8); //display.print(" x ");  //display.print((int)(1000*mx)); 
+    //display.setCursor(43, 8); //display.print(" mG");
+    //display.setCursor(0, 16); //display.print(" y "); //display.print((int)(1000*my)); 
+    //display.setCursor(43, 16); //display.print(" mG");
+    //display.setCursor(0, 24); //display.print(" z "); //display.print((int)(1000*mz)); 
+    //display.setCursor(43, 24); //display.print(" mG");
+    //display.setCursor(0, 32); //display.print(" T "); //display.print(temperature, 1); 
+    //display.setCursor(43, 32); //display.print(" C");
+    //display.//display();
     
     count = millis();
     digitalWrite(ledPin, !digitalRead(ledPin));
@@ -241,12 +230,12 @@ void MAG3110Offsets()
 {
    MAG3110Standby();  // Must be in standby to change registers
    
-   writeByte(MAG3110_ADDRESS, OFF_X_MSB, 0x00); // X-axis compensation; this is 0 mg
-   writeByte(MAG3110_ADDRESS, OFF_X_LSB, 0x00); // X-axis compensation; this is 0 mg
-   writeByte(MAG3110_ADDRESS, OFF_Y_MSB, 0x00); // X-axis compensation; this is 0 mg
-   writeByte(MAG3110_ADDRESS, OFF_Y_LSB, 0x00); // X-axis compensation; this is 0 mg
-   writeByte(MAG3110_ADDRESS, OFF_Z_MSB, 0x00); // X-axis compensation; this is 0 mg
-   writeByte(MAG3110_ADDRESS, OFF_Z_LSB, 0x00); // X-axis compensation; this is 0 mg
+   writeByte(MAG3110_ADDRESS, OFF_X_MSB, 0x00); 
+   writeByte(MAG3110_ADDRESS, OFF_X_LSB, 0x00); 
+   writeByte(MAG3110_ADDRESS, OFF_Y_MSB, 0x00); 
+   writeByte(MAG3110_ADDRESS, OFF_Y_LSB, 0x00); 
+   writeByte(MAG3110_ADDRESS, OFF_Z_MSB, 0x00); 
+   writeByte(MAG3110_ADDRESS, OFF_Z_LSB, 0x00); 
    
    MAG3110Active();  // Set to active to start reading
 }

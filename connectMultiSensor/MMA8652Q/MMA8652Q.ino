@@ -87,24 +87,24 @@ void loop1()
 
 void loop()
 {
-    float data[3];
-    // int16_t data[3];
+    // float data[3];
+    int16_t data[3];
     // One can use the interrupt pins to detect a data ready condition; here we just check the STATUS register for a data ready bit
     //Serial.println(_MMA8652.status());
-    if( _MMA8652.status() & 0x08)
-    {
-        _MMA8652.ReadXYZ(data);
-        // _MMA8652.ReadXYZraw(data);
+    // if( _MMA8652.status() & 0x08)
+    // {
+        // _MMA8652.ReadXYZ(data);
+        _MMA8652.ReadXYZraw(data);
         Serial.print(data[0]);
         Serial.print(",");
         Serial.print(data[1]);
         Serial.print(",");
         Serial.println(data[2]);
-        delay(10);
-    }
-    while(1){
-        // statement
-    }
+        // delay(50);
+    // }
+    // while(1){
+    //     // statement
+    // }
 }
 
 
