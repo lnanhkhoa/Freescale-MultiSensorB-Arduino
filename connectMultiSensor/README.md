@@ -19,14 +19,13 @@
 	#define FXOS8700Q_WHOAMI_VAL 0xC7
 
 ^ - MAG3110 3-axis magnetometer
-	#define MAG_ADDR 0x1D
+	#define MAG_ADDR 0x0E
 	#define MAG_WHOAMI  0x07
 	#define MAG_3110_WHO_AM_I_VALUE 0xC4
 
 ^ - MPL3115A2 presure
 
-	#define REG_WHO_AM_I        0x0C 
-	#define MPL3115A2_WHOAMI_VAL 0xD1
+	/
 
 ^ - MMA9553L pedometer
 
@@ -50,3 +49,9 @@ Note for Arduino:
 	word 	-----	2byte
 	int 	-----	2byte
 
+I2C device found at address 0x0E  !
+I2C device found at address 0x1D  !
+I2C device found at address 0x1E  !
+I2C device found at address 0x20  !
+I2C device found at address 0x4C  !
+I2C device found at address 0x60  !

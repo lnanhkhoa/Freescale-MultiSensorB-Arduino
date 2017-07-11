@@ -289,8 +289,8 @@ void MMA8652::config(void)
     _i2c.write( MMA8652_SLAVE_ADDR, data, 2);
 }
 
-float MMA8652::getAres(void) {
-    
+float MMA8652::getAres(void) 
+{    
     switch (accelFSR)
     {
     // Possible accelerometer scales (and their register bit settings) are:
@@ -325,27 +325,27 @@ char MMA8652::WhoAmIValue(void){
 void MMA8652::ReadXYZ(float * a)
 {
     int16_t accelCount[3];
-    if(_i2c.readByte(MMA8652_SLAVE_ADDR, MMA8652_STATUS) & 0x08)  // When this bit set, all axes have new data
-    {
+    //if(_i2c.readByte(MMA8652_SLAVE_ADDR, MMA8652_STATUS) & 0x08)  // When this bit set, all axes have new data
+    //{
         ReadXYZraw(accelCount);
         getAres();
         a[0] = (float)accelCount[0]*aRes;
         a[1] = (float)accelCount[1]*aRes;
         a[2] = (float)accelCount[2]*aRes;  
-    }
+    //}
 }
 
 
 void MMA8652::ReadXYZraw(int16_t * destination)
 {
-    if(_i2c.readByte(MMA8652_SLAVE_ADDR, MMA8652_STATUS) & 0x08)  // When this bit set, all axes have new data
-    {
+    //if(_i2c.readByte(MMA8652_SLAVE_ADDR, MMA8652_STATUS) & 0x08)  // When this bit set, all axes have new data
+    //{
     	uint8_t rawData[6];  // x/y/z accel register data stored here
         _i2c.readBytes(MMA8652_SLAVE_ADDR, MMA8652_OUT_X_MSB, 6, &rawData[0]);  // Read the six raw data registers into data array
         destination[0] = ((int16_t) rawData[0] << 8 | rawData[1]) >> 4;
         destination[1] = ((int16_t) rawData[2] << 8 | rawData[3]) >> 4;
         destination[2] = ((int16_t) rawData[4] << 8 | rawData[5]) >> 4;
-    }
+    //}
 }
   
    

@@ -66,25 +66,6 @@ void setup()
     }
 }
 
-
-void loop1()
-{
-    float data[3];
-    // int data[3];
-
-    while(true){
-        _MMA8652.ReadXYZ(data);
-        // _MMA8652.ReadXYZraw(data);
-        Serial.print(data[0]);
-        Serial.print(",");
-        Serial.print(data[1]);
-        Serial.print(",");
-        Serial.println(data[2]);
-        delay(100);
-        // statement
-    }
-}
-
 void loop()
 {
     // float data[3];

@@ -1,11 +1,16 @@
 
 
+#ifndef ARDUINO_H_
+#define ARDUINO_H_
+#include <Arduino.h>
+#endif
+
 #ifndef WIRE_H
 #define WIRE_H
 #include <Wire.h>
 #endif
 
-#include "FXAS21000.h"
+#include "FXAS21002CQ.h"
 
 
 int16_t accelCount[3];  // Stores the 12-bit signed value
@@ -15,7 +20,7 @@ bool sleepMode = false;
 
 float gRes, gBias[3] = {0, 0, 0}; // scale resolutions per LSB for the sensors
 
-FXAS21000 _FXAS21000(5,4);
+FXAS21002CQ _FXAS21002CQ(5,4);
 
 
 
@@ -25,24 +30,23 @@ void setup()
     // digitalWrite(ledPin, LOW);
 
     Serial.begin(38400);
-    Serial.println("OK");
-    _FXAS21000.begin();
-    // _MMA8652.Reset();
+    Serial.println("START");
+    _FXAS21002CQ.begin();
     // Read the WHO_AM_I register, this is a good test of communication
 
 
-    char c = _FXAS21000.getWhoAmI();
-    if (c == _FXAS21000.WhoAmIValue()) // WHO_AM_I should always be 0x4A
+    char c = _FXAS21002CQ.getWhoAmI();
+    if (c == _FXAS21002CQ.WhoAmIValue()) // WHO_AM_I should always be 0x4A
     { 
-        Serial.println("MMA3110 3-axis 16-bit magnetometer 1 mGauss LSB.");
-        Serial.print("WHO_AM_I should always be 0xC4. ");
+        Serial.println("FXAS21002CQ 3-axis 14-bit gyroscope 25 mdeg/s LSB.");
+        Serial.print("WHO_AM_I should always be 0xD7. ");
         Serial.print("So, I am 0x");  
         Serial.println(c, HEX);
 
-        _FXAS21000.Reset(); // Start by resetting sensor device to default settings
-        _FXAS21000.calibrate(gBias);
-        _FXAS21000.init();  // init the accelerometer if communication is OK
-        Serial.println("MMA3110 is online...");
+        _FXAS21002CQ.Reset(); // Start by resetting sensor device to default settings
+        _FXAS21002CQ.calibrate(gBias);
+        _FXAS21002CQ.init();  // init the accelerometer if communication is OK
+        Serial.println("FXAS21002CQ is online...");
     //     // _MMA8652.config();
         delay(2000);
     }
@@ -50,8 +54,8 @@ void setup()
     {
         Serial.print("I Am 0x");  
         Serial.print(c, HEX);  
-        Serial.println(". I Should be 0xC4!"); 
-        Serial.println("Could not connect to MAG3110");
+        Serial.println(". I Should be 0xD1!"); 
+        Serial.println("Could not connect to FXAS21002CQ");
         while(1) ; // Loop forever if communication doesn't happen
     }
 }
@@ -62,9 +66,9 @@ void loop()
     // int16_t data[3];
     // One can use the interrupt pins to detect a data ready condition; here we just check the STATUS register for a data ready bit
     //Serial.println(_MAG3110.status());
-    if( _FXAS21000.status() & 0x08)
+    if( _FXAS21002CQ.status() & 0x08)
     {
-        _FXAS21000.ReadXYZ(data);
+        _FXAS21002CQ.ReadXYZ(data);
         // _MAG3110.ReadXYZraw(data);
         Serial.print(data[0]);
         Serial.print(",");

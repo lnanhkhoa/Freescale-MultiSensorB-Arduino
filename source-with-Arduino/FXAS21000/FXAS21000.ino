@@ -114,7 +114,7 @@ void setup()
 {
   Serial.begin(38400);
 
-//  lcd.begin(16, 2);// Initialize the LCD with 16 characters and 2 lines
+  //  lcd.begin(16, 2);// Initialize the LCD with 16 characters and 2 lines
  
   // Set up the interrupt pins, they're set as active high, push-pull
   pinMode(int1Pin, INPUT);
